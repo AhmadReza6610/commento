@@ -13,7 +13,8 @@
   display: flex;
   flex-wrap: wrap;
   margin-top: 10px;
-  gap: 5px;
+  margin-bottom: 5px;
+  gap: 8px;
 }
 
 .commento-option-reaction {
@@ -33,6 +34,7 @@
 .commento-active-reaction {
   background-color: #e2f0ff;
   border-color: #b8daff;
+  font-weight: bold;
 }
 
 /* Downvote count styling */

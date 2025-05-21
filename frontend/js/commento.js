@@ -614,10 +614,24 @@
   }
 
 
+  // Sort policies
+  var SORT_POLICY_SCORE_DESC = "score-desc";
+  var SORT_POLICY_CREATION_DATE_DESC = "creationdate-desc";
+  var SORT_POLICY_CREATION_DATE_ASC = "creationdate-asc";
+  var SORT_POLICY_REACTION_FUNNY_DESC = "reaction-funny-desc";
+  var SORT_POLICY_REACTION_INTERESTING_DESC = "reaction-interesting-desc";
+  var SORT_POLICY_REACTION_UPSETTING_DESC = "reaction-upsetting-desc";
+  var SORT_POLICY_REACTION_SAD_DESC = "reaction-sad-desc";
+
+
   var sortPolicyNames = {
     "score-desc": "Upvotes",
     "creationdate-desc": "Newest",
     "creationdate-asc": "Oldest",
+    "reaction-funny-desc": "Funniest",
+    "reaction-interesting-desc": "Most Interesting",
+    "reaction-upsetting-desc": "Most Upsetting",
+    "reaction-sad-desc": "Saddest",
   };
 
 
@@ -1559,6 +1573,30 @@
         "markdown": comment.markdown,
       };
     });
+    
+    // Sort comments based on the selected sort policy
+    for (var parentHex in m) {
+      if (sortPolicy === SORT_POLICY_SCORE_DESC) {
+        m[parentHex].sort(function(a, b) {
+          return b.score - a.score;
+        });
+      } else if (sortPolicy === SORT_POLICY_CREATION_DATE_DESC) {
+        m[parentHex].sort(function(a, b) {
+          return b.creationDate - a.creationDate;
+        });
+      } else if (sortPolicy === SORT_POLICY_CREATION_DATE_ASC) {
+        m[parentHex].sort(function(a, b) {
+          return a.creationDate - b.creationDate;
+        });
+      } else if (sortPolicy.startsWith("reaction-")) {
+        var reactionType = sortPolicy.substring(9, sortPolicy.lastIndexOf("-"));
+        m[parentHex].sort(function(a, b) {
+          var aCount = (a.reactions && a.reactions[reactionType]) ? a.reactions[reactionType] : 0;
+          var bCount = (b.reactions && b.reactions[reactionType]) ? b.reactions[reactionType] : 0;
+          return bCount - aCount;
+        });
+      }
+    }
 
     return m;
   }
